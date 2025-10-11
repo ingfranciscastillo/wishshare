@@ -22,20 +22,20 @@ export default function FeaturesSection() {
             </div>
             <ul className="mt-8 divide-y border-y *:flex *:items-center *:gap-3 *:py-3">
               <li>
-                <Share2 className="size-5" />
-                Comparte tus listas por enlace o correo electrónico
-              </li>
-              <li>
-                <Sparkles className="size-5" />
+                <Sparkles className="size-5 text-accent" />
                 Rápida, intuitiva y lista para usar en segundos
               </li>
               <li>
-                <Heart className="size-5" />
+                <Heart className="size-5 text-accent" />
                 Sigue las listas más populares e inspírate
               </li>
               <li>
-                <Palette className="size-5" />
+                <Palette className="size-5 text-accent" />
                 Personaliza tus wishlists con estilo y categorías
+              </li>
+              <li>
+                <Share2 className="size-5 text-accent" />
+                Comparte tus listas por enlace o correo electrónico
               </li>
             </ul>
           </div>
