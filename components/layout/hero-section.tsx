@@ -1,19 +1,28 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Mail, Menu, SendHorizonal, X } from "lucide-react";
-import Image from "next/image";
+import { useAuth, UserButton } from "@clerk/nextjs";
+import { Menu, Sparkles, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { ModeToggle } from "../modeToggle";
+import heroImage from "@/assets/hero-image.jpg";
+import { TextEffect } from "../motion-primitives/text-effect";
+import Image from "next/image";
+import { Badge } from "../ui/badge";
+import { AnimatedNumber } from "../motion-primitives/animated-number";
 
 const menuItems = [
-  { name: "Features", href: "#" },
-  { name: "Solution", href: "#" },
-  { name: "Pricing", href: "#" },
-  { name: "About", href: "#" },
+  { name: "Explorar Wishlists", href: "/explore" },
+  { name: "Cómo funciona", href: "/how-it-works" },
+  { name: "Contacto", href: "/contact" },
+  { name: "Sobre nosotros", href: "/sobre-nosotros" },
 ];
 
 export default function HeroSection() {
   const [menuState, setMenuState] = useState(false);
+
+  const { userId } = useAuth();
+
   return (
     <>
       <header>
@@ -58,18 +67,31 @@ export default function HeroSection() {
                   </ul>
                 </div>
 
-                <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit lg:border-l lg:pl-6">
-                  <Button asChild variant="outline" size="sm">
-                    <Link href="/sign-in">
-                      <span>Login</span>
-                    </Link>
-                  </Button>
+                <ModeToggle />
 
-                  <Button asChild size="sm">
-                    <Link href="/sign-up">
-                      <span>Sign up</span>
-                    </Link>
-                  </Button>
+                <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit lg:border-l lg:pl-6">
+                  {userId ? (
+                    <>
+                      <Button asChild>
+                        <Link href={"/dashboard"}>Dashboard</Link>
+                      </Button>
+                      <UserButton />
+                    </>
+                  ) : (
+                    <>
+                      <Button asChild variant="outline" size="sm">
+                        <Link href="/sign-in">
+                          <span>Login</span>
+                        </Link>
+                      </Button>
+
+                      <Button asChild size="sm">
+                        <Link href="/sign-up">
+                          <span>Sign up</span>
+                        </Link>
+                      </Button>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
@@ -78,85 +100,102 @@ export default function HeroSection() {
       </header>
 
       <main>
-        <section className="overflow-hidden">
-          <div className="relative mx-auto max-w-5xl px-6 py-28 lg:py-20">
-            <div className="lg:flex lg:items-center lg:gap-12">
-              <div className="relative z-10 mx-auto max-w-xl text-center lg:ml-0 lg:w-1/2 lg:text-left">
-                <Link
-                  href="/"
-                  className="rounded-(--radius) mx-auto flex w-fit items-center gap-2 border p-1 pr-3 lg:ml-0"
-                >
-                  <span className="bg-muted rounded-[calc(var(--radius)-0.25rem)] px-2 py-1 text-xs">
-                    New
-                  </span>
-                  <span className="text-sm">Introduction Tailark Html</span>
-                  <span className="bg-(--color-border) block h-4 w-px"></span>
-
-                  <ArrowRight className="size-4" />
-                </Link>
-
-                <h1 className="mt-10 text-balance text-4xl font-bold md:text-5xl xl:text-5xl">
-                  Production Ready Digital Marketing blocks
-                </h1>
-                <p className="mt-8">
-                  Error totam sit illum. Voluptas doloribus asperiores quaerat
-                  aperiam. Quidem harum omnis beatae ipsum soluta!
-                </p>
-
+        <section className="w-full py-20 lg:py-40">
+          <div className="container mx-auto">
+            <div className="grid grid-cols-1 gap-8 items-center md:grid-cols-2">
+              <div className="flex gap-4 flex-col">
                 <div>
-                  <form
-                    action=""
-                    className="mx-auto my-10 max-w-sm lg:my-12 lg:ml-0 lg:mr-auto"
-                  >
-                    <div className="bg-background has-[input:focus]:ring-muted relative grid grid-cols-[1fr_auto] items-center rounded-[calc(var(--radius)+0.75rem)] border pr-3 shadow shadow-zinc-950/5 has-[input:focus]:ring-2">
-                      <Mail className="text-caption pointer-events-none absolute inset-y-0 left-5 my-auto size-5" />
+                  <Badge variant="outline">
+                    <Sparkles className="w-4 h-4 text-primary" />
+                    <span className="text-sm font-medium text-primary">
+                      Compartir deseos nunca fue tan fácil
+                    </span>
+                  </Badge>
+                </div>
+                <div className="flex gap-4 flex-col">
+                  <h1 className="text-5xl md:text-7xl max-w-lg tracking-tighter text-left font-regular">
+                    <TextEffect per="char" preset="scale">
+                      Tus deseos, compartidos
+                    </TextEffect>
+                  </h1>
+                  <p className="text-lg leading-relaxed tracking-tight text-muted-foreground max-w-md text-left">
+                    Crea wishlists hermosas con productos de cualquier tienda
+                    online. Comparte con amigos y familia para que siempre
+                    regalen lo que realmente quieres.
+                  </p>
+                </div>
+                <div className="flex flex-row gap-4">
+                  <Button asChild size="lg" className="gap-4">
+                    <Link href={"/sign-up"}>Inicia ahora</Link>
+                  </Button>
+                </div>
 
-                      <input
-                        placeholder="Your mail address"
-                        className="h-14 w-full bg-transparent pl-12 focus:outline-none"
-                        type="email"
+                <div className="flex items-center gap-8 pt-4">
+                  <div>
+                    <div className="text-3xl font-bold text-foreground">
+                      <AnimatedNumber
+                        springOptions={{
+                          bounce: 0,
+                          duration: 2000,
+                        }}
+                        value={10000}
                       />
-
-                      <div className="md:pr-1.5 lg:pr-0">
-                        <Button
-                          aria-label="submit"
-                          className="rounded-(--radius)"
-                        >
-                          <span className="hidden md:block">Get Started</span>
-                          <SendHorizonal
-                            className="relative mx-auto size-5 md:hidden"
-                            strokeWidth={2}
-                          />
-                        </Button>
-                      </div>
                     </div>
-                  </form>
-
-                  <ul className="list-inside list-disc space-y-2">
-                    <li>Faster</li>
-                    <li>Modern</li>
-                    <li>100% Customizable</li>
-                  </ul>
+                    <p className="text-sm text-muted-foreground">
+                      Wishlists creadas
+                    </p>
+                  </div>
+                  <div className="h-12 w-px bg-border" />
+                  <div>
+                    <div className="text-3xl font-bold text-foreground">
+                      50k+
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      Regalos perfectos
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="absolute inset-0 -mx-4 rounded-3xl p-3 lg:col-span-3">
+
+              {/* Right content - Hero image */}
               <div className="relative">
-                <div className="bg-radial-[at_65%_25%] to-background z-1 -inset-17 absolute from-transparent to-40%"></div>
-                <Image
-                  className="hidden dark:block"
-                  src="/music.png"
-                  alt="app illustration"
-                  width={2796}
-                  height={2008}
-                />
-                <Image
-                  className="dark:hidden"
-                  src="/music-light.png"
-                  alt="app illustration"
-                  width={2796}
-                  height={2008}
-                />
+                <div className="relative rounded-3xl overflow-hidden shadow-glow">
+                  <Image
+                    src={heroImage}
+                    alt="WishShare hero illustration with floating gift boxes"
+                    className="w-full h-auto animate-float"
+                    height={800}
+                    width={800}
+                  />
+                </div>
+
+                {/* Floating cards decoration */}
+                <div className="absolute -top-4 -right-4 bg-card border border-border rounded-2xl p-4 shadow-card animate-float">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-lg bg-accent" />
+                    <div>
+                      <div className="text-sm font-medium">Amazon</div>
+                      <div className="text-xs text-muted-foreground">
+                        $49.99
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  className="absolute -bottom-4 -left-4 bg-card border border-border rounded-2xl p-4 shadow-card animate-float"
+                  style={{ animationDelay: "1s" }}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-lg bg-primary" />
+                    <div>
+                      <div className="text-sm font-medium">eBay</div>
+                      <div className="text-xs text-muted-foreground">
+                        $29.99
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

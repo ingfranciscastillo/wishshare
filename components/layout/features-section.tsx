@@ -1,5 +1,6 @@
-import { Activity, DraftingCompass, Mail, Zap } from "lucide-react";
+import { Share2, Sparkles, Heart, Palette } from "lucide-react";
 import Image from "next/image";
+import { TextEffect } from "../motion-primitives/text-effect";
 
 export default function FeaturesSection() {
   return (
@@ -9,29 +10,32 @@ export default function FeaturesSection() {
           <div className="lg:col-span-2">
             <div className="md:pr-6 lg:pr-0">
               <h2 className="text-4xl font-semibold lg:text-5xl">
-                Built for Scaling teams
+                <TextEffect per="char" preset="scale">
+                  Hecha para compartir tus deseos
+                </TextEffect>
               </h2>
               <p className="mt-6">
-                Orrupti aut temporibus assumenda atque ab, accusamus sit,
-                molestiae veniam laboriosam pariatur.
+                Organiza tus ideas, crea listas únicas y compártelas fácilmente
+                con tus amigos o familia. Ideal para cumpleaños, fiestas o
+                simplemente guardar lo que más te gusta.
               </p>
             </div>
             <ul className="mt-8 divide-y border-y *:flex *:items-center *:gap-3 *:py-3">
               <li>
-                <Mail className="size-5" />
-                Email and web support
+                <Share2 className="size-5" />
+                Comparte tus listas por enlace o correo electrónico
               </li>
               <li>
-                <Zap className="size-5" />
-                Fast response time
+                <Sparkles className="size-5" />
+                Rápida, intuitiva y lista para usar en segundos
               </li>
               <li>
-                <Activity className="size-5" />
-                Menitoring and analytics
+                <Heart className="size-5" />
+                Sigue las listas más populares e inspírate
               </li>
               <li>
-                <DraftingCompass className="size-5" />
-                Architectural review
+                <Palette className="size-5" />
+                Personaliza tus wishlists con estilo y categorías
               </li>
             </ul>
           </div>
