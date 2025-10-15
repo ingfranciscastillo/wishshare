@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
-import { items, usersTable } from "@/lib/db/schema";
+import { wishlists, usersTable } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 
 export async function PATCH(
@@ -12,7 +12,7 @@ export async function PATCH(
     const { userId: clerkId } = await auth();
 
     if (!clerkId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" });
     }
 
     const user = await db.query.usersTable.findFirst({
@@ -26,35 +26,33 @@ export async function PATCH(
     const { id } = await params;
     const body = await req.json();
 
-    // Verificar ownership via wishlist
-    const item = await db.query.items.findFirst({
-      where: eq(items.id, id),
-      with: {
-        wishlist: true,
-      },
+    const wishlist = await db.query.wishlists.findFirst({
+      where: eq(wishlists.id, id),
     });
 
-    if (!item) {
-      return NextResponse.json({ error: "Item not found" }, { status: 404 });
+    if (!wishlist) {
+      return NextResponse.json(
+        { error: "Wishlist not found" },
+        { status: 404 }
+      );
     }
 
-    if (item.wishlist?.owner_id !== user.id) {
+    if (wishlist.owner_id !== user.id) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    // Actualizar
     const [updated] = await db
-      .update(items)
+      .update(wishlists)
       .set({
         ...body,
         updatedAt: new Date(),
       })
-      .where(eq(items.id, id))
+      .where(eq(wishlists.id, id))
       .returning();
 
     return NextResponse.json(updated);
   } catch (error) {
-    console.error("Error updating item:", error);
+    console.error("Error updating wishlist:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
@@ -83,28 +81,28 @@ export async function DELETE(
 
     const { id } = params;
 
-    // Verificar ownership via wishlist
-    const item = await db.query.items.findFirst({
-      where: eq(items.id, id),
-      with: {
-        wishlist: true,
-      },
+    // Verificar ownership
+    const wishlist = await db.query.wishlists.findFirst({
+      where: eq(wishlists.id, id),
     });
 
-    if (!item) {
-      return NextResponse.json({ error: "Item not found" }, { status: 404 });
+    if (!wishlist) {
+      return NextResponse.json(
+        { error: "Wishlist not found" },
+        { status: 404 }
+      );
     }
 
-    if (item.wishlist?.owner_id !== user.id) {
+    if (wishlist.owner_id !== user.id) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    // Eliminar
-    await db.delete(items).where(eq(items.id, id));
+    // Eliminar (cascade eliminará los items automáticamente)
+    await db.delete(wishlists).where(eq(wishlists.id, id));
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Error deleting item:", error);
+    console.error("Error deleting wishlist:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

@@ -1,9 +1,10 @@
 import Navbar from "@/components/layout/navbar";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import Link from "next/link";
 import React from "react";
 
-const page = () => {
+const DashboardPage = () => {
   return (
     <div className="min-h-screen">
       <Navbar />
@@ -18,9 +19,12 @@ const page = () => {
               Gestiona todas tus listas de deseos en un solo lugar
             </p>
           </div>
-          <Button size={"lg"} variant={"secondary"} className="group">
-            <Plus className="size-5 mr-2 group-hover:rotate-90 transition-transform" />
-            Nueva Wishlist
+
+          <Button asChild size={"lg"} variant={"secondary"} className="group">
+            <Link href={"/wishlist/new"}>
+              <Plus className="size-5 mr-2 group-hover:rotate-90 transition-transform" />
+              Nueva Wishlist
+            </Link>
           </Button>
         </div>
       </div>
@@ -28,4 +32,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default DashboardPage;
