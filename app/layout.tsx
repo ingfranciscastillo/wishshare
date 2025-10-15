@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Outfit, Fira_Code } from "next/font/google";
 import "./globals.css";
 // Clerk
 import { ClerkProvider } from "@clerk/nextjs";
@@ -7,12 +7,12 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { esMX } from "@clerk/localizations";
 import { shadcn } from "@clerk/themes";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const outfitSans = Outfit({
+  variable: "--font-outfit",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
+const firaMono = Fira_Code({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
@@ -36,7 +36,7 @@ export default function RootLayout({
     >
       <html lang="es">
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+          className={`${outfitSans.variable} ${firaMono.variable} antialiased`}
         >
           <ThemeProvider
             attribute="class"
