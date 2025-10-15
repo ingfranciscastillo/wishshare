@@ -1,11 +1,19 @@
 import type { Metadata } from "next";
 import { Outfit, Fira_Code } from "next/font/google";
 import "./globals.css";
+
 // Clerk
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/theme-provider";
 import { esMX } from "@clerk/localizations";
 import { shadcn } from "@clerk/themes";
+
+import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
+import { extractRouterConfig } from "uploadthing/server";
+import { ourFileRouter } from "./api/uploadthing/core";
+
+// Sonner
+import { Toaster } from "@/components/ui/sonner";
 
 const outfitSans = Outfit({
   variable: "--font-outfit",
@@ -13,7 +21,7 @@ const outfitSans = Outfit({
 });
 
 const firaMono = Fira_Code({
-  variable: "--font-geist-mono",
+  variable: "--font-fira-code",
   subsets: ["latin"],
 });
 
@@ -38,6 +46,7 @@ export default function RootLayout({
         <body
           className={`${outfitSans.variable} ${firaMono.variable} antialiased`}
         >
+          <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -45,6 +54,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             {children}
+            <Toaster richColors />
           </ThemeProvider>
         </body>
       </html>
