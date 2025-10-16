@@ -14,7 +14,7 @@ export const createWishlistSchema = z.object({
   visibility: z.enum(["public", "private"], {
     error: "La visibilidad es obligatoria",
   }),
-  coverImage: z.url({ error: "Debe ser una URL valida" }).optional(),
+  coverImage: z.string({ error: "Debe ser una URL valida" }).optional(),
 });
 
 export type CreateWishlistInput = z.infer<typeof createWishlistSchema>;

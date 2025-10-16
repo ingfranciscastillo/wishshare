@@ -5,7 +5,6 @@ import "./globals.css";
 // Clerk
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/theme-provider";
-import { esMX } from "@clerk/localizations";
 import { shadcn } from "@clerk/themes";
 
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
@@ -37,7 +36,6 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider
-      localization={esMX}
       appearance={{
         baseTheme: shadcn,
       }}

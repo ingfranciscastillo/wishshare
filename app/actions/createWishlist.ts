@@ -19,6 +19,8 @@ export async function createWishlistAction(data: CreateWishlistInput) {
 
   const parsedData = createWishlistSchema.parse(data);
 
+  console.log(parsedData);
+
   let user = await db.query.usersTable.findFirst({
     where: eq(usersTable.clerk_id, clerkId),
   });

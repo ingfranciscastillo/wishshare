@@ -1,4 +1,3 @@
-"use client";
 import React, { useState, useTransition } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,6 +22,7 @@ import {
   SelectValue,
 } from "./ui/select";
 import {
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -35,7 +35,6 @@ import { Spinner } from "./ui/spinner";
 import { UploadButton } from "@/lib/uploadthing";
 import { createWishlistSchema } from "@/lib/validations/wishlist";
 import { createWishlistAction } from "@/app/actions/createWishlist";
-import { redirect } from "next/navigation";
 
 const WishlistForm = () => {
   const [uploadUrl, setUploadUrl] = useState<string | null>(null);
@@ -52,6 +51,7 @@ const WishlistForm = () => {
   });
 
   function onSubmit(values: z.infer<typeof createWishlistSchema>) {
+    console.log(values);
     startTransition(async () => {
       try {
         await createWishlistAction({
@@ -59,7 +59,7 @@ const WishlistForm = () => {
         });
         toast.success("Wishlist creada correctamente 🎉");
         form.reset();
-        redirect("/dashboard");
+        setUploadUrl(null);
       } catch (error) {
         console.error(error);
         toast.error("Error al crear la wishlist");
@@ -163,12 +163,19 @@ const WishlistForm = () => {
               />
             )}
           </div>
-          <Button type="submit">
-            {isPending ? <Spinner /> : "Crear wishlist"}
-          </Button>
+
+          <DialogFooter className="sm:justify-start">
+            <Button type="submit">
+              {isPending ? <Spinner /> : "Crear wishlist"}
+            </Button>
+            <DialogClose asChild>
+              <Button type="button" variant="outline">
+                Close
+              </Button>
+            </DialogClose>
+          </DialogFooter>
         </form>
       </Form>
-      <DialogFooter></DialogFooter>
     </DialogContent>
   );
 };
